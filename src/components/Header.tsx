@@ -1,4 +1,4 @@
-import { Bell, Search, User, Settings } from "lucide-react";
+import { Bell, Search, User, Settings, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -12,15 +12,27 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 
-export function Header() {
+interface HeaderProps {
+  onMobileMenuToggle: () => void;
+}
+
+export function Header({ onMobileMenuToggle }: HeaderProps) {
   return (
     <header className="sticky top-0 z-30 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
-      <div className="flex h-16 items-center justify-between px-6">
-        {/* Left side - Page title and breadcrumb */}
+      <div className="flex h-16 items-center justify-between px-4 lg:px-6">
+        {/* Left side - Mobile menu + Page title */}
         <div className="flex items-center space-x-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onMobileMenuToggle}
+            className="lg:hidden"
+          >
+            <Menu className="w-5 h-5" />
+          </Button>
           <div>
-            <h1 className="text-xl font-semibold text-foreground">Dashboard</h1>
-            <p className="text-sm text-muted-foreground">Welcome back, Admin</p>
+            <h1 className="text-lg lg:text-xl font-semibold text-foreground">Dashboard</h1>
+            <p className="text-xs lg:text-sm text-muted-foreground">Welcome back, Admin</p>
           </div>
         </div>
 
