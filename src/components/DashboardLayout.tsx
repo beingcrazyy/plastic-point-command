@@ -18,7 +18,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         />
         <div className="flex-1 lg:ml-64">
           <Header onMobileMenuToggle={() => setIsMobileMenuOpen(true)} />
-          <main className="p-4 lg:p-6">
+          <main className="p-8">
             {children}
           </main>
         </div>

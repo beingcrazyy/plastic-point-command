@@ -30,7 +30,9 @@ import {
   Trash2,
   Ban,
   Download
-} from "lucide-react";
+ } from "lucide-react";
+import { AddUserDialog } from "@/components/AddUserDialog";
+import { useToast } from "@/hooks/use-toast";
 
 const users = [
   {
@@ -101,30 +103,35 @@ const getStatusColor = (status: string) => {
 
 export default function Users() {
   const [searchTerm, setSearchTerm] = useState("");
+  const { toast } = useToast();
 
   const filteredUsers = users.filter(user =>
     user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleExport = () => {
+    toast({
+      title: "Export Started",
+      description: "User data is being exported. You'll receive a download link shortly.",
+    });
+  };
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">User Management</h1>
+            <h1 className="text-2xl font-bold text-foreground">User Management</h1>
             <p className="text-muted-foreground">Manage platform users and their activities</p>
           </div>
-          <div className="flex items-center space-x-2">
-            <Button variant="outline" size="sm">
-              <Download className="w-4 h-4 mr-2" />
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={handleExport} className="gap-2">
+              <Download className="w-4 h-4" />
               Export
             </Button>
-            <Button size="sm">
-              <UserPlus className="w-4 h-4 mr-2" />
-              Add User
-            </Button>
+            <AddUserDialog />
           </div>
         </div>
 

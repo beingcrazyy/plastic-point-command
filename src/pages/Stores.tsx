@@ -31,7 +31,9 @@ import {
   MapPin,
   Download,
   Plus
-} from "lucide-react";
+ } from "lucide-react";
+import { AddStoreDialog } from "@/components/AddStoreDialog";
+import { useToast } from "@/hooks/use-toast";
 
 const stores = [
   {
@@ -99,30 +101,35 @@ const getStatusColor = (status: string) => {
 
 export default function Stores() {
   const [searchTerm, setSearchTerm] = useState("");
+  const { toast } = useToast();
 
   const filteredStores = stores.filter(store =>
     store.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     store.address.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleExport = () => {
+    toast({
+      title: "Export Started",
+      description: "Stores data is being exported. You'll receive a download link shortly.",
+    });
+  };
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">Store Management</h1>
-            <p className="text-muted-foreground">Manage partner stores and collection points</p>
+            <h1 className="text-2xl font-bold text-foreground">Store Management</h1>
+            <p className="text-muted-foreground">Manage partner stores and their activities</p>
           </div>
-          <div className="flex items-center space-x-2">
-            <Button variant="outline" size="sm">
-              <Download className="w-4 h-4 mr-2" />
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={handleExport} className="gap-2">
+              <Download className="w-4 h-4" />
               Export
             </Button>
-            <Button size="sm">
-              <Plus className="w-4 h-4 mr-2" />
-              Add Store
-            </Button>
+            <AddStoreDialog />
           </div>
         </div>
 
