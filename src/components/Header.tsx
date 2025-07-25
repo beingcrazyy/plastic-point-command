@@ -1,9 +1,9 @@
-import { Bell, Search, User, Settings, Menu } from "lucide-react";
+import { Search, User, Settings, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { useNavigate } from "react-router-dom";
+import { NotificationDropdown } from "@/components/NotificationDropdown";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,14 +12,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
 
 interface HeaderProps {
   onMobileMenuToggle: () => void;
 }
 
 export function Header({ onMobileMenuToggle }: HeaderProps) {
-  const navigate = useNavigate();
   
   return (
     <header className="sticky top-0 z-30 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
@@ -52,22 +50,7 @@ export function Header({ onMobileMenuToggle }: HeaderProps) {
           </div>
 
           {/* Notifications */}
-          <div className="relative">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="relative"
-              onClick={() => navigate("/notifications")}
-            >
-              <Bell className="w-5 h-5" />
-              <Badge 
-                variant="destructive" 
-                className="absolute -top-1 -right-1 w-5 h-5 text-xs p-0 flex items-center justify-center"
-              >
-                3
-              </Badge>
-            </Button>
-          </div>
+          <NotificationDropdown />
 
           {/* Theme Toggle */}
           <ThemeToggle />
