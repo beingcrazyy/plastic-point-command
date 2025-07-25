@@ -11,14 +11,15 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-muted/40">
-      <div className="flex">
+      <div className="flex min-h-screen">
         <Sidebar 
           isMobileOpen={isMobileMenuOpen} 
           setIsMobileOpen={setIsMobileMenuOpen} 
         />
-        <div className="flex-1 lg:ml-64">
+        {/* Main content area with consistent left padding for sidebar */}
+        <div className="flex-1 flex flex-col min-w-0 lg:pl-64">
           <Header onMobileMenuToggle={() => setIsMobileMenuOpen(true)} />
-          <main className="p-8">
+          <main className="flex-1 p-8">
             {children}
           </main>
         </div>
