@@ -103,15 +103,13 @@ const getTierColor = (color: string) => {
 
 export default function Rates() {
   const [editingTier, setEditingTier] = useState<number | null>(null);
-  const [newRates, setNewRates] = useState<{ [key: number]: number }>({});
   const [editingTierData, setEditingTierData] = useState<typeof plasticTiers[0] | null>(null);
 
-  const handleEditRate = (tierId: number, currentRate: number) => {
+  const handleEditRate = (tierId: number) => {
     const tier = plasticTiers.find(t => t.id === tierId);
     if (tier) {
       setEditingTier(tierId);
       setEditingTierData({ ...tier });
-      setNewRates({ ...newRates, [tierId]: currentRate });
     }
   };
 
@@ -210,120 +208,100 @@ export default function Rates() {
                 </div>
 
                 <div className="flex items-center justify-between pt-2">
-                  {editingTier === tier.id ? (
-                    <div className="flex items-center space-x-2 w-full">
-                      <Input
-                        type="number"
-                        value={newRates[tier.id] || tier.pointsPerKg}
-                        onChange={(e) => setNewRates({ 
-                          ...newRates, 
-                          [tier.id]: parseInt(e.target.value) || 0 
-                        })}
-                        className="w-24"
-                        min="1"
-                      />
-                      <span className="text-sm text-muted-foreground">pts/kg</span>
-                      <Button size="sm" onClick={() => handleSaveRate(tier.id)}>
-                        <Save className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  ) : (
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={() => handleEditRate(tier.id, tier.pointsPerKg)}
-                    >
-                      <Edit className="w-4 h-4 mr-2" />
-                      Edit Rate
-                    </Button>
-                  )}
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => handleEditRate(tier.id)}
+                  >
+                    <Edit className="w-4 h-4 mr-2" />
+                    Edit Tier
+                  </Button>
                 </div>
               </CardContent>
             </Card>
           ))}
         </div>
 
-        {/* Detailed Tier Information */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Info className="w-5 h-5 mr-2" />
-              Plastic Classification Guide
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {plasticTiers.map((tier) => (
-                <div key={tier.id} className="space-y-4">
-                  <div className="text-center">
-                    <h3 className="font-semibold text-lg mb-2">{tier.tier} - {tier.name}</h3>
-                    <div className="w-full h-32 bg-muted rounded-lg flex items-center justify-center mb-3">
-                      <ImageIcon className="w-8 h-8 text-muted-foreground" />
-                    </div>
-                    <Badge variant="outline" className={getTierColor(tier.color)}>
-                      {tier.pointsPerKg} points per kg
-                    </Badge>
-                  </div>
-                  
+        {/* Edit Tier Dialog */}
+        <Dialog open={editingTier !== null} onOpenChange={(open) => !open && setEditingTier(null)}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>Edit Tier Information</DialogTitle>
+            </DialogHeader>
+            {editingTierData && (
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <h4 className="font-medium mb-2">Description:</h4>
-                    <p className="text-sm text-muted-foreground">{tier.description}</p>
+                    <label className="text-sm font-medium">Tier Name</label>
+                    <Input
+                      value={editingTierData.tier}
+                      onChange={(e) => setEditingTierData({
+                        ...editingTierData,
+                        tier: e.target.value
+                      })}
+                    />
                   </div>
-
                   <div>
-                    <h4 className="font-medium mb-2">Common Items:</h4>
-                    <ul className="space-y-1">
-                      {tier.examples.map((example, index) => (
-                        <li key={index} className="text-sm text-muted-foreground flex items-center">
-                          <Recycle className="w-3 h-3 mr-2" />
-                          {example}
-                        </li>
-                      ))}
-                    </ul>
+                    <label className="text-sm font-medium">Category Name</label>
+                    <Input
+                      value={editingTierData.name}
+                      onChange={(e) => setEditingTierData({
+                        ...editingTierData,
+                        name: e.target.value
+                      })}
+                    />
                   </div>
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Rate Change Form */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Update Multiple Rates</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {plasticTiers.map((tier) => (
-                <div key={tier.id} className="space-y-2">
-                  <label className="text-sm font-medium">{tier.tier} Rate (points/kg)</label>
-                  <Input
-                    type="number"
-                    defaultValue={tier.pointsPerKg}
-                    min="1"
-                    className="w-full"
+                
+                <div>
+                  <label className="text-sm font-medium">Description</label>
+                  <Textarea
+                    value={editingTierData.description}
+                    onChange={(e) => setEditingTierData({
+                      ...editingTierData,
+                      description: e.target.value
+                    })}
                   />
                 </div>
-              ))}
-            </div>
-            
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Reason for Change</label>
-              <Textarea 
-                placeholder="Explain the reason for this rate change..."
-                className="w-full"
-              />
-            </div>
 
-            <div className="flex justify-end space-x-2">
-              <Button variant="outline">Cancel</Button>
-              <Button>
-                <Save className="w-4 h-4 mr-2" />
-                Save Changes
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+                <div>
+                  <label className="text-sm font-medium">Points per Kg</label>
+                  <Input
+                    type="number"
+                    value={editingTierData.pointsPerKg}
+                    onChange={(e) => setEditingTierData({
+                      ...editingTierData,
+                      pointsPerKg: parseInt(e.target.value) || 0
+                    })}
+                    min="1"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium">Examples (comma-separated)</label>
+                  <Textarea
+                    value={editingTierData.examples.join(', ')}
+                    onChange={(e) => setEditingTierData({
+                      ...editingTierData,
+                      examples: e.target.value.split(',').map(item => item.trim()).filter(item => item)
+                    })}
+                    placeholder="Water bottles, Food containers, PVC pipes, ..."
+                  />
+                </div>
+
+                <div className="flex justify-end space-x-2 pt-4">
+                  <Button variant="outline" onClick={() => setEditingTier(null)}>
+                    Cancel
+                  </Button>
+                  <Button onClick={() => handleSaveRate(editingTier!)}>
+                    <Save className="w-4 h-4 mr-2" />
+                    Save Changes
+                  </Button>
+                </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
       </div>
     </DashboardLayout>
   );
