@@ -8,33 +8,34 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 215 28% 17%;
+    /* Modern dashboard theme inspired by the reference image */
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 215 28% 17%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 215 28% 17%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
 
-    --primary: 142 76% 36%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 262 83% 58%;
+    --primary-foreground: 210 20% 98%;
 
-    --secondary: 142 13% 96%;
-    --secondary-foreground: 215 28% 17%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
 
-    --muted: 210 40% 98%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
 
-    --accent: 142 13% 96%;
-    --accent-foreground: 215 28% 17%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 142 76% 36%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 262 83% 58%;
 
     --success: 142 76% 36%;
     --success-foreground: 0 0% 98%;
@@ -45,21 +46,21 @@ All colors MUST be HSL.
     --info: 199 89% 48%;
     --info-foreground: 0 0% 98%;
 
-    /* Custom gradients for dashboard */
-    --gradient-primary: linear-gradient(135deg, hsl(142 76% 36%), hsl(158 64% 52%));
-    --gradient-secondary: linear-gradient(135deg, hsl(142 13% 96%), hsl(210 40% 98%));
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(210 40% 99%));
+    /* Modern gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(262 83% 58%), hsl(268 71% 60%));
+    --gradient-secondary: linear-gradient(135deg, hsl(240 3.7% 15.9%), hsl(240 10% 3.9%));
+    --gradient-card: linear-gradient(145deg, hsl(240 10% 3.9%), hsl(240 3.7% 15.9%));
     
-    /* Shadows */
-    --shadow-card: 0 1px 3px 0 hsl(215 28% 17% / 0.1), 0 1px 2px -1px hsl(215 28% 17% / 0.1);
-    --shadow-card-hover: 0 10px 15px -3px hsl(215 28% 17% / 0.1), 0 4px 6px -4px hsl(215 28% 17% / 0.1);
-    --shadow-header: 0 1px 3px 0 hsl(215 28% 17% / 0.1);
+    /* Enhanced shadows */
+    --shadow-card: 0 4px 6px -1px hsl(240 10% 3.9% / 0.1), 0 2px 4px -2px hsl(240 10% 3.9% / 0.1);
+    --shadow-card-hover: 0 20px 25px -5px hsl(240 10% 3.9% / 0.1), 0 8px 10px -6px hsl(240 10% 3.9% / 0.1);
+    --shadow-header: 0 1px 3px 0 hsl(240 10% 3.9% / 0.1);
 
-    /* Animations */
+    /* Smooth animations */
     --transition-base: all 0.2s ease-in-out;
     --transition-slow: all 0.3s ease-in-out;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 

@@ -33,6 +33,7 @@ import {
   Plus
  } from "lucide-react";
 import { AddStoreDialog } from "@/components/AddStoreDialog";
+import { StoreDetailsDialog } from "@/components/StoreDetailsDialog";
 import { useToast } from "@/hooks/use-toast";
 
 const stores = [
@@ -101,12 +102,28 @@ const getStatusColor = (status: string) => {
 
 export default function Stores() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedStore, setSelectedStore] = useState<typeof stores[0] | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [storesList, setStoresList] = useState(stores);
   const { toast } = useToast();
 
-  const filteredStores = stores.filter(store =>
+  const filteredStores = storesList.filter(store =>
     store.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     store.address.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleViewStore = (store: typeof stores[0]) => {
+    setSelectedStore(store);
+    setIsDialogOpen(true);
+  };
+
+  const handleStoreUpdate = (updatedStore: typeof stores[0]) => {
+    setStoresList(prev => prev.map(s => s.id === updatedStore.id ? updatedStore : s));
+  };
+
+  const handleStoreDelete = (storeId: number) => {
+    setStoresList(prev => prev.filter(s => s.id !== storeId));
+  };
 
   const handleExport = () => {
     toast({
@@ -256,21 +273,29 @@ export default function Stores() {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleViewStore(store)}>
                               <Eye className="w-4 h-4 mr-2" />
-                              View Analytics
+                              View Details
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleViewStore(store)}>
                               <Edit className="w-4 h-4 mr-2" />
                               Edit Store
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
-                              <MapPin className="w-4 h-4 mr-2" />
-                              View on Map
-                            </DropdownMenuItem>
-                            <DropdownMenuItem className="text-destructive">
+                            <DropdownMenuItem 
+                              className="text-destructive"
+                              onClick={() => {
+                                if (window.confirm(`Are you sure you want to delete ${store.name}?`)) {
+                                  handleStoreDelete(store.id);
+                                  toast({
+                                    title: "Store Deleted",
+                                    description: `${store.name} has been deleted successfully.`,
+                                    variant: "destructive",
+                                  });
+                                }
+                              }}
+                            >
                               <Trash2 className="w-4 h-4 mr-2" />
-                              Remove Store
+                              Delete
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -282,6 +307,14 @@ export default function Stores() {
             </div>
           </CardContent>
         </Card>
+
+        <StoreDetailsDialog
+          store={selectedStore}
+          open={isDialogOpen}
+          onOpenChange={setIsDialogOpen}
+          onStoreUpdate={handleStoreUpdate}
+          onStoreDelete={handleStoreDelete}
+        />
       </div>
     </DashboardLayout>
   );

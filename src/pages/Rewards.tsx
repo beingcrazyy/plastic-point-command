@@ -33,6 +33,7 @@ import {
   Star
  } from "lucide-react";
 import { AddProductDialog } from "@/components/AddProductDialog";
+import { RewardDetailsDialog } from "@/components/RewardDetailsDialog";
 import { useToast } from "@/hooks/use-toast";
 
 const rewards = [
@@ -97,12 +98,28 @@ const getStatusColor = (status: string) => {
 
 export default function Rewards() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedReward, setSelectedReward] = useState<typeof rewards[0] | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [rewardsList, setRewardsList] = useState(rewards);
   const { toast } = useToast();
 
-  const filteredRewards = rewards.filter(reward =>
+  const filteredRewards = rewardsList.filter(reward =>
     reward.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     reward.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleViewReward = (reward: typeof rewards[0]) => {
+    setSelectedReward(reward);
+    setIsDialogOpen(true);
+  };
+
+  const handleRewardUpdate = (updatedReward: typeof rewards[0]) => {
+    setRewardsList(prev => prev.map(r => r.id === updatedReward.id ? updatedReward : r));
+  };
+
+  const handleRewardDelete = (rewardId: number) => {
+    setRewardsList(prev => prev.filter(r => r.id !== rewardId));
+  };
 
   const handleExport = () => {
     toast({
@@ -261,21 +278,29 @@ export default function Rewards() {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleViewReward(reward)}>
                               <Eye className="w-4 h-4 mr-2" />
-                              View Analytics
+                              View Details
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleViewReward(reward)}>
                               <Edit className="w-4 h-4 mr-2" />
                               Edit Product
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
-                              <Package className="w-4 h-4 mr-2" />
-                              Update Stock
-                            </DropdownMenuItem>
-                            <DropdownMenuItem className="text-destructive">
+                            <DropdownMenuItem 
+                              className="text-destructive"
+                              onClick={() => {
+                                if (window.confirm(`Are you sure you want to delete ${reward.name}?`)) {
+                                  handleRewardDelete(reward.id);
+                                  toast({
+                                    title: "Reward Deleted",
+                                    description: `${reward.name} has been deleted successfully.`,
+                                    variant: "destructive",
+                                  });
+                                }
+                              }}
+                            >
                               <Trash2 className="w-4 h-4 mr-2" />
-                              Remove Product
+                              Delete
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -287,6 +312,14 @@ export default function Rewards() {
             </div>
           </CardContent>
         </Card>
+
+        <RewardDetailsDialog
+          reward={selectedReward}
+          open={isDialogOpen}
+          onOpenChange={setIsDialogOpen}
+          onRewardUpdate={handleRewardUpdate}
+          onRewardDelete={handleRewardDelete}
+        />
       </div>
     </DashboardLayout>
   );

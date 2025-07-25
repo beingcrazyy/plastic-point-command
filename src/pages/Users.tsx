@@ -23,7 +23,6 @@ import {
 import { 
   Search, 
   Filter, 
-  UserPlus, 
   MoreHorizontal, 
   Eye, 
   Edit, 
@@ -31,8 +30,8 @@ import {
   Ban,
   Download
  } from "lucide-react";
-import { AddUserDialog } from "@/components/AddUserDialog";
 import { useToast } from "@/hooks/use-toast";
+import { UserDetailsDialog } from "@/components/UserDetailsDialog";
 
 const users = [
   {
@@ -103,12 +102,28 @@ const getStatusColor = (status: string) => {
 
 export default function Users() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedUser, setSelectedUser] = useState<typeof users[0] | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [usersList, setUsersList] = useState(users);
   const { toast } = useToast();
 
-  const filteredUsers = users.filter(user =>
+  const filteredUsers = usersList.filter(user =>
     user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleViewUser = (user: typeof users[0]) => {
+    setSelectedUser(user);
+    setIsDialogOpen(true);
+  };
+
+  const handleUserUpdate = (updatedUser: typeof users[0]) => {
+    setUsersList(prev => prev.map(u => u.id === updatedUser.id ? updatedUser : u));
+  };
+
+  const handleUserDelete = (userId: number) => {
+    setUsersList(prev => prev.filter(u => u.id !== userId));
+  };
 
   const handleExport = () => {
     toast({
@@ -131,7 +146,6 @@ export default function Users() {
               <Download className="w-4 h-4" />
               Export
             </Button>
-            <AddUserDialog />
           </div>
         </div>
 
@@ -245,19 +259,38 @@ export default function Users() {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleViewUser(user)}>
                               <Eye className="w-4 h-4 mr-2" />
                               View Details
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleViewUser(user)}>
                               <Edit className="w-4 h-4 mr-2" />
                               Edit User
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => {
+                              const updatedUser = { ...user, status: user.status === "active" ? "suspended" : "active" };
+                              handleUserUpdate(updatedUser);
+                              toast({
+                                title: `User ${updatedUser.status === "suspended" ? "Suspended" : "Activated"}`,
+                                description: `${user.name} has been ${updatedUser.status === "suspended" ? "suspended" : "activated"}.`,
+                              });
+                            }}>
                               <Ban className="w-4 h-4 mr-2" />
-                              Suspend
+                              {user.status === "active" ? "Suspend" : "Activate"}
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="text-destructive">
+                            <DropdownMenuItem 
+                              className="text-destructive"
+                              onClick={() => {
+                                if (window.confirm(`Are you sure you want to delete ${user.name}?`)) {
+                                  handleUserDelete(user.id);
+                                  toast({
+                                    title: "User Deleted",
+                                    description: `${user.name} has been deleted successfully.`,
+                                    variant: "destructive",
+                                  });
+                                }
+                              }}
+                            >
                               <Trash2 className="w-4 h-4 mr-2" />
                               Delete
                             </DropdownMenuItem>
@@ -271,6 +304,14 @@ export default function Users() {
             </div>
           </CardContent>
         </Card>
+
+        <UserDetailsDialog
+          user={selectedUser}
+          open={isDialogOpen}
+          onOpenChange={setIsDialogOpen}
+          onUserUpdate={handleUserUpdate}
+          onUserDelete={handleUserDelete}
+        />
       </div>
     </DashboardLayout>
   );

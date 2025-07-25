@@ -104,16 +104,27 @@ const getTierColor = (color: string) => {
 export default function Rates() {
   const [editingTier, setEditingTier] = useState<number | null>(null);
   const [newRates, setNewRates] = useState<{ [key: number]: number }>({});
+  const [editingTierData, setEditingTierData] = useState<typeof plasticTiers[0] | null>(null);
 
   const handleEditRate = (tierId: number, currentRate: number) => {
-    setEditingTier(tierId);
-    setNewRates({ ...newRates, [tierId]: currentRate });
+    const tier = plasticTiers.find(t => t.id === tierId);
+    if (tier) {
+      setEditingTier(tierId);
+      setEditingTierData({ ...tier });
+      setNewRates({ ...newRates, [tierId]: currentRate });
+    }
   };
 
   const handleSaveRate = (tierId: number) => {
-    // Here you would typically save to backend
-    console.log(`Saving new rate for tier ${tierId}: ${newRates[tierId]}`);
+    if (editingTierData) {
+      // Update the tier in the plasticTiers array
+      const updatedTiers = plasticTiers.map(tier => 
+        tier.id === tierId ? editingTierData : tier
+      );
+      console.log("Updated tiers:", updatedTiers);
+    }
     setEditingTier(null);
+    setEditingTierData(null);
   };
 
   return (

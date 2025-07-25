@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Bell, AlertTriangle, Info, CheckCircle, X } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const notifications = [
   {
@@ -32,6 +34,25 @@ const notifications = [
 ];
 
 export default function Notifications() {
+  const [notificationsList, setNotificationsList] = useState(notifications);
+  const { toast } = useToast();
+
+  const handleMarkAllRead = () => {
+    setNotificationsList(prev => prev.map(n => ({ ...n, read: true })));
+    toast({
+      title: "All notifications marked as read",
+      description: "All notifications have been marked as read.",
+    });
+  };
+
+  const handleDismissNotification = (id: number) => {
+    setNotificationsList(prev => prev.filter(n => n.id !== id));
+    toast({
+      title: "Notification dismissed",
+      description: "The notification has been removed.",
+    });
+  };
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -40,7 +61,7 @@ export default function Notifications() {
             <h1 className="text-3xl font-bold text-foreground">Notifications</h1>
             <p className="text-muted-foreground">System alerts and updates</p>
           </div>
-          <Button variant="outline" size="sm">Mark All Read</Button>
+          <Button variant="outline" size="sm" onClick={handleMarkAllRead}>Mark All Read</Button>
         </div>
 
         <Card>
@@ -51,7 +72,7 @@ export default function Notifications() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {notifications.map((notification) => (
+            {notificationsList.map((notification) => (
               <div key={notification.id} className="flex items-start justify-between p-4 border rounded-lg">
                 <div className="flex items-start space-x-3">
                   <div className={`p-2 rounded-lg ${
@@ -69,7 +90,9 @@ export default function Notifications() {
                     <p className="text-xs text-muted-foreground mt-1">{notification.time}</p>
                   </div>
                 </div>
-                <Button variant="ghost" size="sm"><X className="w-4 h-4" /></Button>
+                <Button variant="ghost" size="sm" onClick={() => handleDismissNotification(notification.id)}>
+                  <X className="w-4 h-4" />
+                </Button>
               </div>
             ))}
           </CardContent>
