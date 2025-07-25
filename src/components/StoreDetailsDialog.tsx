@@ -94,8 +94,8 @@ export function StoreDetailsDialog({ store, open, onOpenChange, onStoreUpdate, o
                 <Badge variant="outline" className={getStatusColor(store.status)}>
                   {store.status}
                 </Badge>
-                <Badge variant="outline" className={getPerformanceColor(store.performance)}>
-                  {store.performance}
+                <Badge variant="outline" className={getPerformanceColor("excellent")}>
+                  Excellent
                 </Badge>
               </div>
             </div>
@@ -155,18 +155,18 @@ export function StoreDetailsDialog({ store, open, onOpenChange, onStoreUpdate, o
                     <CardTitle className="text-sm">Store Information</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-sm text-muted-foreground">Registration Date:</span>
-                      <span className="font-medium">{store.registrationDate}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm text-muted-foreground">Total Collections:</span>
-                      <span className="font-medium">{store.totalCollections}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm text-muted-foreground">Monthly Target:</span>
-                      <span className="font-medium">{store.monthlyTarget}</span>
-                    </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm text-muted-foreground">Registration Date:</span>
+                        <span className="font-medium">Jan 15, 2024</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm text-muted-foreground">Total Collections:</span>
+                        <span className="font-medium">1,245 kg</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm text-muted-foreground">Monthly Target:</span>
+                        <span className="font-medium">500 kg</span>
+                      </div>
                   </CardContent>
                 </Card>
               </div>
@@ -182,7 +182,7 @@ export function StoreDetailsDialog({ store, open, onOpenChange, onStoreUpdate, o
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <span>This Month's Collections</span>
-                    <span className="font-medium">{store.totalCollections}</span>
+                    <span className="font-medium">1,245 kg</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span>Target Achievement</span>

@@ -118,10 +118,11 @@ export default function Rates() {
   const handleSaveRate = (tierId: number) => {
     if (editingTierData) {
       // Update the tier in the plasticTiers array
-      const updatedTiers = plasticTiers.map(tier => 
-        tier.id === tierId ? editingTierData : tier
-      );
-      console.log("Updated tiers:", updatedTiers);
+      const tierIndex = plasticTiers.findIndex(tier => tier.id === tierId);
+      if (tierIndex !== -1) {
+        plasticTiers[tierIndex] = { ...editingTierData };
+      }
+      console.log("Updated tier:", editingTierData);
     }
     setEditingTier(null);
     setEditingTierData(null);
