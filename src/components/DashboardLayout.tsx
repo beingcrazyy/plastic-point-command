@@ -16,8 +16,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           isMobileOpen={isMobileMenuOpen} 
           setIsMobileOpen={setIsMobileMenuOpen} 
         />
-        {/* Main content area with consistent left padding for sidebar */}
-        <div className="flex-1 flex flex-col min-w-0 lg:pl-64">
+        {/* Main content area with 32px spacing from sidebar */}
+        <div className="flex-1 flex flex-col min-w-0 lg:ml-72">
           <Header onMobileMenuToggle={() => setIsMobileMenuOpen(true)} />
           <main className="flex-1 p-8">
             {children}
