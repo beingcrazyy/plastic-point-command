@@ -51,7 +51,7 @@ export function Sidebar({ isMobileOpen, setIsMobileOpen }: SidebarProps) {
         />
       )}
       
-      <aside className="fixed left-0 top-0 z-50 h-full w-64 bg-gradient-to-b from-card to-muted/30 border-r border-border shadow-xl transition-transform duration-300 lg:translate-x-0 lg:static lg:z-0 -translate-x-full data-[state=open]:translate-x-0" data-state={isMobileOpen ? "open" : "closed"}>
+      <aside className="fixed left-0 top-0 z-50 h-screen w-64 bg-gradient-to-b from-card to-muted/30 border-r border-border shadow-xl transition-transform duration-300 lg:translate-x-0 lg:static lg:z-0 -translate-x-full data-[state=open]:translate-x-0 flex flex-col" data-state={isMobileOpen ? "open" : "closed"}>
         {/* Header */}
         <div className="flex h-16 items-center justify-between px-4 border-b border-border bg-card/50">
           <div className="flex items-center space-x-2">
