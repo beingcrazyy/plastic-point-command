@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Plus, Filter, Calendar as CalendarIcon, Edit, Trash, History, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import { DateRange } from "react-day-picker";
 
 const mockGames = [
   {
