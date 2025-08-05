@@ -12,7 +12,8 @@ import {
   Menu,
   X,
   Recycle,
-  LogOut
+  LogOut,
+  Gamepad2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,6 +24,7 @@ const navigation = [
   { name: "Users", href: "/users", icon: Users },
   { name: "Stores", href: "/stores", icon: Store },
   { name: "Rewards", href: "/rewards", icon: Gift },
+  { name: "Games", href: "/games", icon: Gamepad2 },
   { name: "Plastic Rates", href: "/rates", icon: Recycle },
   { name: "Analytics", href: "/analytics", icon: BarChart3 },
   { name: "Settings", href: "/settings", icon: Settings },
